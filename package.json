@@ -1,0 +1,16 @@
+{
+  "name": "ddns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@alicloud/pop-core": "^1.7.10",
+    "node-schedule": "^2.0.0",
+    "public-ip": "^4.0.4"
+  }
+}
