@@ -15,9 +15,9 @@ module.exports = {
             client.request('UpdateDomainRecord', params, {
                 method: 'POST'
             }).then((result) => {
-              console.log('阿里云IP修改成功', JSON.stringify(result));
+              console.log(Date.now(), '阿里云IP修改成功', JSON.stringify(result));
             }, (ex) => {
-              console.error('阿里云IP修改失败', ex);
+              console.error(Date.now(), '阿里云IP修改失败', ex);
             })
         })
     }
