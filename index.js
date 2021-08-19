@@ -2,17 +2,17 @@ const publicIp = require('public-ip')
 const schedule = require('node-schedule');
 const { updateDomainRecord } = require('./update-domain');
 
-const currentPublicIP = '';
+let currentPublicIP = '';
 
 schedule.scheduleJob('10 * * * *', function(){
     // 获取公网IP
     publicIp.v4().then(ip => {
+        console.log(Date.now(), 'IP比对', currentPublicIP, ip);
         if (currentPublicIP === ip) {
             return;
         }
 
         currentPublicIP = ip;
-        console.log(Date.now(), 'IP比对', currentPublicIP, ip);
 
         const options = [
             { Value: ip, Type: 'A', RR: '@', RecordId: '3496792216816640' },
