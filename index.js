@@ -4,11 +4,6 @@ const { updateDomainRecord } = require('./update-domain');
 
 let currentPublicIP = '';
 
-publicIp.v4().then(ip => {
-    currentPublicIP = ip;
-    console.log(Date.now(), '设置初始IP', currentPublicIP);
-})
-
 schedule.scheduleJob('30 * * * * *', () => {
     // 获取公网IP
     publicIp.v4().then(ip => {
