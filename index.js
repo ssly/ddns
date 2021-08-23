@@ -11,7 +11,7 @@ schedule.scheduleJob('30 * * * * *', () => {
         if (currentPublicIP === ip) {
             return;
         }
-        console.log(getTimeString, 'IP变化', `${currentPublicIP}->${ip}`)
+        console.log(getTimeString(), 'IP变化', `${currentPublicIP}->${ip}`)
 
         currentPublicIP = ip;
         // 修改阿里云lius.me解析
