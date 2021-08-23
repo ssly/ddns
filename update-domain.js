@@ -1,6 +1,7 @@
 const Core = require('@alicloud/pop-core');
 
-const { accessKeyId, accessKeySecret } = require('./config/index')
+const { accessKeyId, accessKeySecret } = require('./config/index');
+const { getTimeString } = require('./date');
 
 var client = new Core({
   accessKeyId,
@@ -10,16 +11,20 @@ var client = new Core({
 });
 
 module.exports = {
-    updateDomainRecord(options = []) {
-        options.forEach(params => {
-            client.request('UpdateDomainRecord', params, {
-                method: 'POST'
-            }).then((result) => {
-              console.log(Date.now(), '阿里云IP修改成功', JSON.stringify(result));
-            }, (ex) => {
-              console.error(Date.now(), '阿里云IP修改失败', ex);
-            })
-        })
-    }
+  updateDomainRecord(ip) {
+    const options = [
+      { Value: ip, Type: 'A', RR: 'site', RecordId:  '3496792385999872' }
+    ]
+
+    options.forEach(params => {
+      client.request('UpdateDomainRecord', params, {
+        method: 'POST'
+      }).then((result) => {
+        console.log(getTimeString(), '阿里云IP修改成功', JSON.stringify(result));
+      }, (ex) => {
+        console.error(getTimeString(), '阿里云IP修改失败', ex);
+      })
+    })
+  }
 }
 
