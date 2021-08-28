@@ -11,6 +11,22 @@ var client = new Core({
 });
 
 module.exports = {
+  queryDomainRecord() {
+    const params = {
+       RecordId: '3496792385999872',
+    }
+    return new Promise(resolve => {
+      client.request('DescribeDomainRecordInfo', params, {
+        method: 'POST',
+      }).then((result) => {
+        console.log(getTimeString(), '查询lius.me解析成功', JSON.stringify(result));
+        resolve(result.Value);
+      }, (ex) => {
+        console.error(getTimeString(), '查询lius.me解析失败', ex);
+        resolve('');
+      })
+    })
+  },
   updateDomainRecord(ip) {
     const options = [
       { Value: ip, Type: 'A', RR: 'site', RecordId:  '3496792385999872' }

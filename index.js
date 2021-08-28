@@ -1,9 +1,14 @@
 const publicIp = require('public-ip')
 const schedule = require('node-schedule');
-const { updateDomainRecord } = require('./update-domain');
+const { updateDomainRecord, queryDomainRecord } = require('./update-domain');
 const { getTimeString } = require('./date');
 
 let currentPublicIP = '';
+
+// 查询当前域名解析的IP设为当前值
+queryDomainRecord().then(ip => {
+  currentPublicIP = ip;
+});
 
 schedule.scheduleJob('30 * * * * *', () => {
     // 获取公网IP
