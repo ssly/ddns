@@ -10,18 +10,18 @@ queryDomainRecord().then(ip => {
   currentPublicIP = ip;
 });
 
-schedule.scheduleJob('30 * * * * *', () => {
-    // 获取公网IP
-    publicIp.v4().then(ip => {
-        if (currentPublicIP === ip) {
-            return;
-        }
-        console.log(getTimeString(), 'IP变化', `${currentPublicIP}->${ip}`)
+schedule.scheduleJob('0,20,40 * * * * *', () => {
+  // 获取公网IP
+  publicIp.v4().then(ip => {
+      if (currentPublicIP === ip) {
+          return;
+      }
+      console.log(getTimeString(), 'IP变化', `${currentPublicIP}->${ip}`)
 
-        currentPublicIP = ip;
-        // 修改阿里云lius.me解析
-        updateDomainRecord(currentPublicIP);
-    })
+      currentPublicIP = ip;
+      // 修改阿里云lius.me解析
+      updateDomainRecord(currentPublicIP);
+  })
 });
 
 
