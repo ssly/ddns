@@ -29,7 +29,6 @@ module.exports = {
   },
   updateDomainRecord(ip) {
     const options = [
-      { Value: ip, Type: 'A', RR: 'home', RecordId:  '3496792385999872' },
       { Value: ip, Type: 'A', RR: 'nas', RecordId:  '739142052571687936' },
     ]
 
