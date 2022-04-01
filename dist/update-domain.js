@@ -13,7 +13,7 @@ var client = new Core({
 module.exports = {
   queryDomainRecord() {
     const params = {
-       RecordId: '3496792385999872',
+       RecordId: '739142052571687936',
     }
     return new Promise(resolve => {
       client.request('DescribeDomainRecordInfo', params, {
