@@ -1,7 +1,6 @@
-const Core = require('@alicloud/pop-core');
-
-const { accessKeyId, accessKeySecret } = require('./config/index');
-const { getTimeString } = require('./date');
+const Core = require('@alicloud/pop-core')
+const { accessKeyId, accessKeySecret, RR, domain } = require('./config/index')
+const { getTimeString } = require('./date')
 
 var client = new Core({
   accessKeyId,
@@ -12,33 +11,53 @@ var client = new Core({
 
 module.exports = {
   queryDomainRecord() {
-    const params = {
-       RecordId: '739142052571687936',
-    }
     return new Promise(resolve => {
-      client.request('DescribeDomainRecordInfo', params, {
+      client.request('DescribeDomainRecords', {
+        DomainName: domain,
+        SearchMode: 'EXACT',
+        KeyWord: RR,        
+      }, {
         method: 'POST',
       }).then((result) => {
-        console.log(getTimeString(), '查询lius.me解析成功', JSON.stringify(result));
-        resolve(result.Value);
+        // 查到精确的那条，经测试，阿里云返回的result.DomainRecords.Record是数组
+        const current = result.DomainRecords.Record.filter(v => v.RR === RR)[0]
+        console.log(getTimeString(), '查询阿里云解析成功', JSON.stringify(result))
+        if (current) {
+          resolve({ ip: current.Value, recordId: current.RecordId })
+        } else {
+          // 未查到记录，创建阿里云解析
+          const ip = '0.0.0.0'
+          client.request('AddDomainRecord', {
+            DomainName: domain,
+            RR,
+            Type: 'A',
+            Value: ip,
+          }, { method: 'POST' }).then((result) => {
+            console.log(getTimeString(), '创建阿里云解析成功', JSON.stringify(result))
+            resolve({ ip, recordId: result.RecordId })
+          }, (ex) => {
+            console.error(getTimeString(), '创建阿里云解析失败', ex)
+            resolve({})
+          })
+        }
       }, (ex) => {
-        console.error(getTimeString(), '查询lius.me解析失败', ex);
-        resolve('');
+        console.error(getTimeString(), '查询阿里云解析失败', ex)
+        resolve({})
       })
     })
   },
-  updateDomainRecord(ip) {
+  updateDomainRecord(Value, RecordId) {
     const options = [
-      { Value: ip, Type: 'A', RR: 'nas', RecordId:  '739142052571687936' },
+      { Value, Type: 'A', RR, RecordId },
     ]
 
     options.forEach(params => {
       client.request('UpdateDomainRecord', params, {
         method: 'POST'
       }).then((result) => {
-        console.log(getTimeString(), '阿里云IP修改成功', JSON.stringify(result));
+        console.log(getTimeString(), '阿里云解析修改成功', JSON.stringify(result))
       }, (ex) => {
-        console.error(getTimeString(), '阿里云IP修改失败', ex);
+        console.error(getTimeString(), '阿里云解析修改失败', ex)
       })
     })
   }

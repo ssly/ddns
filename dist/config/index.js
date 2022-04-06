@@ -1,4 +1,6 @@
 module.exports = {
-    accessKeyId: 'LTAI5tCMoPpA23RexuNmJ2M6',
-    accessKeySecret: 'FRIdGGnDekcjOIpZVWqLOJXGkj7I7N',
+  accessKeyId: '', // 阿里云key
+  accessKeySecret: '', // 阿里云key
+  RR: '', // 二级域名，例如 www
+  domain: '', // 一级域名，例如 google.com
 }
