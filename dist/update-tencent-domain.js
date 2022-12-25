@@ -31,7 +31,7 @@ module.exports = {
         method: 'POST',
       }).then((result) => {
         // 查到精确的那条，经测试，阿里云返回的result.DomainRecords.Record是数组
-        const current = result.RecordList.filter(v => v.name === RR)[0]
+        const current = result.RecordList.filter(v => v.Name === RR)[0]
         console.log(getTimeString(), '查询腾讯云解析成功', JSON.stringify(result))
         if (current) {
           resolve({ ip: current.Value, recordId: current.RecordId })

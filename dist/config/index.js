@@ -10,7 +10,7 @@ module.exports = {
       secretId: "AKIDfJvU0okjqy38JTYYTMCygWIybFoMvRsf",
       secretKey: "pfXzsldSbn2Y6c5Rr8Neox8NiDjF1obF",
     },
-    RR: '', // 二级域名，例如 www
+    RR: 'www', // 二级域名，例如 www
     domain: 'sifengyi.com', // 一级域名，例如 google.com
     region: "",
     profile: {
