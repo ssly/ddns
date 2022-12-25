@@ -38,7 +38,7 @@ module.exports = {
         } else {
           // 未查到记录，创建腾讯云解析
           const ip = '0.0.0.0'
-          client.request('AddDomainRecord', {
+          client.request('CreateRecord', {
             "Domain": domain,
             "DomainId": null,
             "SubDomain": null,
