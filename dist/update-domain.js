@@ -1,8 +1,8 @@
 const Core = require('@alicloud/pop-core')
-const { accessKeyId, accessKeySecret, RR, domain } = require('./config/index')
+const { ali: { accessKeyId, accessKeySecret, RR, domain } } = require('./config/index')
 const { getTimeString } = require('./date')
 
-var client = new Core({
+const client = new Core({
   accessKeyId,
   accessKeySecret,
   endpoint: 'https://alidns.cn-hangzhou.aliyuncs.com',

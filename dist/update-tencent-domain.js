@@ -1,20 +1,21 @@
 const tencentcloud = require('tencentcloud-sdk-nodejs')
 const DnspodClient = tencentcloud.dnspod.v20210323.Client;
-const { credential, region, profile, RR } = require('./config/index')
+const { tencent: { credential, region, profile, RR, domain } } = require('./config/index')
 const { getTimeString } = require('./date')
 
 const client = new DnspodClient({
   credential,
   region,
   profile,
-  RR
+  RR,
+  domain
 });
 
 module.exports = {
   queryDomainRecord() {
     return new Promise(resolve => {
       client.request('DescribeRecordList', {
-        Domain: "sifengyi.com",
+        Domain: domain,
         DomainId: null,
         Subdomain: null,
         RecordType: 'A',
@@ -38,7 +39,7 @@ module.exports = {
           // 未查到记录，创建腾讯云解析
           const ip = '0.0.0.0'
           client.request('AddDomainRecord', {
-            "Domain": "sifengyi.com",
+            "Domain": domain,
             "DomainId": null,
             "SubDomain": null,
             "RecordType": "A",
@@ -66,7 +67,7 @@ module.exports = {
   updateDomainRecord(Value, RecordId) {
     const options = [
       {
-        Domain: "sifengyi.com",
+        Domain: domain,
         DomainId: null,
         SubDomain: null,
         RecordType: "A",
