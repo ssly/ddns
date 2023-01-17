@@ -52,6 +52,7 @@ module.exports = {
     ]
 
     options.forEach(params => {
+      console.log(getTimeString(), '阿里updateDomainRecord', JSON.stringify(params))
       client.request('UpdateDomainRecord', params, {
         method: 'POST'
       }).then((result) => {

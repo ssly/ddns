@@ -16,8 +16,15 @@
 
 ## 用法
 
+### 域名商为阿里云
+
 - 阿里云域名处获取`accessKeyId`、`accessKeySecret`补充到`dist/config/index.js`
 - 默认绑定的一级域名(domain)、二级域名为(RR)需要在`dist/config/index.js`内修改
+
+### 域名商为腾讯云
+
+- 腾讯云域名处获取`accessKeyId`、`accessKeySecret`补充到`dist/config/index.js`
+-
 
 ## 摘要
 

@@ -7,16 +7,10 @@ module.exports = {
   },
   tencent: {
     credential: {
-      secretId: "AKIDfJvU0okjqy38JTYYTMCygWIybFoMvRsf",
-      secretKey: "pfXzsldSbn2Y6c5Rr8Neox8NiDjF1obF",
+      secretId: "",
+      secretKey: "",
     },
-    RR: 'www', // 二级域名，例如 www
-    domain: 'sifengyi.com', // 一级域名，例如 google.com
-    region: "",
-    profile: {
-      httpProfile: {
-        endpoint: "dnspod.tencentcloudapi.com",
-      },
-    }, // 腾讯云相关
+    RR: '', // 二级域名，例如 www
+    domain: '', // 一级域名，例如 google.com
   }
 }
