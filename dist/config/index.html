@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>配置页面</title>
+  <meta charset="utf-8">
+</head>
+<body>
+  <h1>配置页面</h1>
+  <form action="/save-config" method="post">
+    <h2>阿里云配置</h2>
+    <label>是否启用(Y/N):</label>
+    <input type="text" name="ali_enabled" value="%ali_enabled%"><br>
+    <label>Access Key ID:</label>
+    <input type="text" name="ali_accessKeyId" value="%ali_accessKeyId%"><br>
+    <label>Access Key Secret:</label>
+    <input type="text" name="ali_accessKeySecret" value="%ali_accessKeySecret%"><br>
+    <label>RR (二级域名):</label>
+    <input type="text" name="ali_RR" value="%ali_RR%"><br>
+    <label>Domain (一级域名):</label>
+    <input type="text" name="ali_domain" value="%ali_domain%"><br>
+
+    <h2>腾讯云配置</h2>
+    <label>是否启用(Y/N):</label>
+    <input type="text" name="tencent_enabled" value="%tencent_enabled%"><br>
+    <label>Secret ID:</label>
+    <input type="text" name="tencent_secretId" value="%tencent_secretId%"><br>
+    <label>Secret Key:</label>
+    <input type="text" name="tencent_secretKey" value="%tencent_secretKey%"><br>
+    <label>RR (二级域名):</label>
+    <input type="text" name="tencent_RR" value="%tencent_RR%"><br>
+    <label>Domain (一级域名):</label>
+    <input type="text" name="tencent_domain" value="%tencent_domain%"><br>
+
+    <input type="submit" value="保存配置">
+  </form>
+</body>
+</html>
