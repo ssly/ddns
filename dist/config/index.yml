@@ -1,12 +1,12 @@
-ali:
-  enabled: 'Y'
-  accessKeyId: LTAI5tH1365Gi3xuV46ZMLos
-  accessKeySecret: QYs7h3zAUldrxFdXjEhzs6nzMBorQX
-  RR: nas
-  domain: lius.me
-tencent:
-  enabled: 'N'
-  secretId: AKIDUqztYxwjx3xf8WiheRD3tfImCUferyxm
-  secretKey: ubDdu33tc9WscBaourbCf6PabUBlBPn2
-  RR: wwww
-  domain: liuxyz.com
+ali:                  # 阿里相关配置
+  enabled: "N"         # 是否开启阿里域名DDNS
+  accessKeyId: ""
+  accessKeySecret: ""
+  RR: ""              # 二级域名，例如 www、nas
+  domain: ""          # 一级域名，例如 google.com
+tencent:              # 腾讯相关配置
+  enabled: "N"         # 是否开启腾讯域名DDNS
+  secretId: ""
+  secretKey: ""
+  RR: ""              # 二级域名，例如 www、nas
+  domain: ""          # 一级域名，例如 google.com
