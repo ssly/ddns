@@ -1,8 +1,9 @@
-# DDNS - 基于 Nodejs & 阿里云域名
+# DDNS - 基于 Docker | Nodejs
 
 ## 用途
-
-- 给有动态公网IP的家庭网络使用
+- 通过域名访问家庭网络
+- 仅支持家庭网络有动态公网IP
+- 目前支持阿里云、腾讯云的域名服务
 
 ## 前提
 
@@ -20,7 +21,7 @@
 
 - 阿里云域名处获取`accessKeyId`、`accessKeySecret`补充到`dist/config/index.js`
 - 默认绑定的一级域名(domain)、二级域名为(RR)需要在`dist/config/index.js`内修改
-
+- [阿里云AccessKey查询](https://ram.console.aliyun.com/manage/ak)
 ### 域名商为腾讯云
 
 - 腾讯云域名处获取`accessKeyId`、`accessKeySecret`补充到`dist/config/index.js`
@@ -29,3 +30,11 @@
 ## 摘要
 
 - [阿里云云解析API](https://help.aliyun.com/document_detail/29776.html)
+
+## 未来功能
+
+- 使用手册，有任何问题可提交 issues
+- 变更后邮件通知
+- 当查询不到时，提示用户是否需要创建
+
+- 支持查询域名列表管理域名

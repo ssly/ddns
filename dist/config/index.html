@@ -33,5 +33,59 @@
 
     <input type="submit" value="保存配置">
   </form>
+
+  <button id="query-domain" type="button">查询域名信息</button>
+  <button id="start-ddns" type="button">启动DDNS[定时器: '0,20,40 * * * * *']</button>
+  <button id="stop-ddns" type="button">关闭DDNS[关闭定时器]</button>
+
+  <script>
+    var queryDomainBtn = document.getElementById('query-domain');
+    queryDomainBtn.addEventListener('click', function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/query-domain');
+      xhr.send();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            alert(xhr.responseText);
+          } else {
+            alert('查询失败');
+          }
+        }
+      }
+    });
+
+    var startDDNSBtn = document.getElementById('start-ddns');
+    startDDNSBtn.addEventListener('click', function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/start-ddns');
+      xhr.send();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            alert(xhr.responseText);
+          } else {
+            alert('启动失败');
+          }
+        }
+      }
+    });
+    
+    var stopDDNSBtn = document.getElementById('stop-ddns');
+    stopDDNSBtn.addEventListener('click', function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/stop-ddns');
+      xhr.send();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            alert(xhr.responseText);
+          } else {
+            alert('关闭失败');
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>

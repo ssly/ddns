@@ -1,22 +1,38 @@
 const tencentcloud = require('tencentcloud-sdk-nodejs')
-const DnspodClient = tencentcloud.dnspod.v20210323.Client;
-const { tencent: { credential, region, profile, RR, domain } } = require('./config/index')
+const DnspodClient = tencentcloud.dnspod.v20210323.Client
 const { getTimeString } = require('./date')
 
-const client = new DnspodClient({
-  credential,
-  RR,
-  domain,
-  region: '',
-  profile: {
-    httpProfile: { endpoint: 'dnspod.tencentcloudapi.com' },
-  },
-});
+
+/**
+ * 获取配置文件参数
+ * @returns {object}
+ */
+const getConfig = () => {
+  const fs = require('fs')
+  const yaml = require('js-yaml')
+  const path = require('path')
+  
+  return yaml.load(
+    fs.readFileSync(path.join(__dirname, 'config/index.yml'), { encoding: 'utf8' })
+  )
+}
+
+const getClient = () => {
+  const { tencent: { secretId, secretKey } } = getConfig()
+  return new DnspodClient({
+    credential: { secretId, secretKey },
+    region: '',
+    profile: {
+      httpProfile: { endpoint: 'dnspod.tencentcloudapi.com' },
+    },
+  })
+}
 
 function createDomain() {
   const ip = '0.0.0.0'
+  const { tencent: { RR, domain } } = getConfig()
   return new Promise(resolve => {
-    client.request('CreateRecord', {
+    getClient().request('CreateRecord', {
       Domain: domain,
       SubDomain: RR,
       RecordType: 'A',
@@ -25,8 +41,8 @@ function createDomain() {
     }, { method: 'POST' }).then((result) => {
       console.log(getTimeString(), '创建腾讯云解析成功', JSON.stringify(result))
       resolve({ ip, recordId: result.RecordId })
-    }, (ex) => {
-      console.error(getTimeString(), '创建腾讯云解析失败', ex)
+    }, (error) => {
+      console.error(getTimeString(), '创建腾讯云解析失败', error)
       resolve({})
     })
   })
@@ -34,8 +50,9 @@ function createDomain() {
 
 module.exports = {
   queryDomainRecord() {
+    const { tencent: { RR, domain } } = getConfig()
     return new Promise(resolve => {
-      client.request('DescribeRecordList', {
+      getClient().request('DescribeRecordList', {
         Domain: domain,
         Subdomain: RR,
         RecordType: 'A',
@@ -49,13 +66,23 @@ module.exports = {
         } else {
           createDomain().then(res => resolve(res))
         }
-      }, (ex) => {
-        console.error(getTimeString(), '查询腾讯云解析失败', ex)
-        createDomain().then(res => resolve(res))
+      }, (error) => {
+        console.error(getTimeString(), '查询腾讯云解析失败', error.code)
+        if (error.code === 'AuthFailure.SecretIdNotFound') {
+          resolve({ error: '密钥错误，请检查' })
+          return
+        }
+        
+        // 如果没有查到记录，就创建一个
+        if (error.code === 'ResourceNotFound.NoDataOfRecord') {
+          createDomain().then(res => resolve(res))
+        }
       })
     })
   },
+
   updateDomainRecord(Value, RecordId) {
+    const { tencent: { RR, domain } } = getConfig()
     const options = [
       {
         Domain: domain,
@@ -69,12 +96,12 @@ module.exports = {
 
     options.forEach(params => {
       console.log(getTimeString(), '腾讯updateDomainRecord', JSON.stringify(params))
-      client.request('ModifyRecord', params, {
+      getClient().request('ModifyRecord', params, {
         method: 'POST'
       }).then((result) => {
         console.log(getTimeString(), '腾讯云解析修改成功', JSON.stringify(result))
-      }, (ex) => {
-        console.error(getTimeString(), '腾讯云解析修改失败', ex)
+      }, (error) => {
+        console.error(getTimeString(), '腾讯云解析修改失败', error)
       })
     })
   }
