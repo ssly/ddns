@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@alicloud/pop-core": "^1.7.10",
+    "js-yaml": "^4.1.0",
     "node-schedule": "^2.0.0",
     "pm2": "^5.1.1",
     "public-ip": "^4.0.4",
