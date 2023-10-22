@@ -17,7 +17,7 @@
 
 ## 用法
 
-> 当前支持`腾讯云`、`阿里云`的域名解析，若有需求可替 issues
+> 当前支持`腾讯云`、`阿里云`的域名解析，若有需求可提 issues
 
 ### 安装及启动
 
@@ -25,7 +25,7 @@
   - 直接将代码 clone 到本地
   - 执行`npm install`安装依赖，执行`npm start`启动服务
 - Docker
-  - `docker push yeqiyeluo/ddns`
+  - `docker pull yeqiyeluo/ddns`
   - `docker run -d -p 8000:8000 --name ddns yeqiyeluo/ddns`
 
 ### 登录控制页
