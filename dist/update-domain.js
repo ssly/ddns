@@ -1,5 +1,4 @@
 const Core = require('@alicloud/pop-core')
-const { ali: { accessKeyId, accessKeySecret, RR, domain } } = require('./config/index')
 const { getTimeString } = require('./date')
 
 /**

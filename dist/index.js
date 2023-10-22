@@ -150,6 +150,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(3456, () => {
-  console.log('Server is running at http://localhost:3456');
+server.listen(8000, () => {
+  console.log('Server is running at http://localhost:8000');
 });
