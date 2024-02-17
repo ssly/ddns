@@ -1,5 +1,5 @@
-#FORM node:lts-alpine3.14 + pm2
-FROM nas.liuxyz.com:3002/base/node:1.0.0
+#FORM node
+FROM node:18-alpine3.18
 
 # set env
 ENV ROOT_PATH=/usr/src/app
