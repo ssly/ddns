@@ -33,6 +33,8 @@
 
 - 访问`http://localhost:8000`
 
+![DDNS PAGE](https://nas.liuxyz.com:3000/oss/home/ddns-page.jpeg)
+
 ### 获取密钥
 
 - [阿里云 AccessKey 查询](https://ram.console.aliyun.com/manage/ak)
