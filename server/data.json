@@ -1,0 +1,18 @@
+{
+  "ali": {
+    "key": "ali",
+    "enable": false,
+    "id": "",
+    "secret": "",
+    "RR": "",
+    "domain": ""
+  },
+  "tencent": {
+    "key": "tencent",
+    "enable": false,
+    "id": "",
+    "secret": "",
+    "RR": "",
+    "domain": ""
+  }
+}
