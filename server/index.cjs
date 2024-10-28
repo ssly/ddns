@@ -2,7 +2,12 @@ const getIP = require('external-ip')()
 const url = require('url')
 const http = require('http')
 const schedule = require('node-schedule')
-const { getJSON, setJSON, handleStaticFile, parseRequestBody } = require('./utils.cjs')
+const {
+  getJSON,
+  setJSON,
+  handleStaticFile,
+  parseRequestBody,
+} = require('./utils.cjs')
 const { updateDomainRecord, queryDomainRecord } = require('./update-domain.cjs')
 const {
   updateDomainRecord: updateTencentDomainRecord,
@@ -28,16 +33,28 @@ const scheduleJob = {
 
   async query(key) {
     if (key === 'ali') {
-      const { error, ip = '', recordId = '' } = await queryDomainRecord(getJSON().ali)
-      console.log(`阿里: 查询当前信息, ip: ${ip}、recordId: ${recordId}, error: ${error}`)
+      const {
+        error,
+        ip = '',
+        recordId = '',
+      } = await queryDomainRecord(getJSON().ali)
+      console.log(
+        `阿里: 查询当前信息, ip: ${ip}、recordId: ${recordId}, error: ${error}`
+      )
       currentAliInfo.publicIP = ip
       currentAliInfo.recordId = recordId
       return { error, ip, recordId, timestamp: Date.now() }
     }
 
     if (key === 'tencent') {
-      const { error, ip = '', recordId = '' } = await queryTencentDomainRecord(getJSON().tencent)
-      console.log(`腾讯: 查询当前信息, ip: ${ip}、recordId: ${recordId}、error: ${error}`)
+      const {
+        error,
+        ip = '',
+        recordId = '',
+      } = await queryTencentDomainRecord(getJSON().tencent)
+      console.log(
+        `腾讯: 查询当前信息, ip: ${ip}、recordId: ${recordId}、error: ${error}`
+      )
       currentTencentInfo.publicIP = ip
       currentTencentInfo.recordId = recordId
       return { error, ip, recordId, timestamp: Date.now() }
@@ -45,27 +62,70 @@ const scheduleJob = {
   },
 
   startScheduleJob(config) {
+    console.log('startScheduleJob')
     // 先停了
     this.stopScheduleJob()
     this.instance = schedule.scheduleJob(this.recon, () => {
-      console.log('startScheduleJob scheduleJob')
       // 获取公网IP
-      return getIP((err, ip) => {
+      return getIP(async (err, ip) => {
         if (err) {
           console.log('获取公网IP失败')
           return
         }
-        console.log('当前IP是', currentTencentInfo.publicIP, ip)
         if (config.ali.enable && currentAliInfo.publicIP !== ip) {
-          console.log(getTimeString(), '阿里：本地外网IP变化', `${currentAliInfo.publicIP}->${ip}`)
+          console.log(
+            getTimeString(),
+            '阿里：本地外网IP变化',
+            `${currentAliInfo.publicIP}->${ip}`
+          )
+
+          // 这里查一下当前的recordId
+          const {
+            error,
+            ip: currentIP,
+            recordId = '',
+          } = await queryDomainRecord(getJSON().ali)
+          if (error) {
+            console.log(getTimeString(), '阿里：查询当前信息失败', error)
+            return
+          }
+
           currentAliInfo.publicIP = ip
-          updateDomainRecord(currentAliInfo.publicIP, currentAliInfo.recordId)
+          currentAliInfo.recordId = recordId
+          updateDomainRecord(
+            getJSON().ali,
+            currentAliInfo.publicIP,
+            currentAliInfo.recordId
+          )
         }
 
         if (config.tencent.enable && currentTencentInfo.publicIP !== ip) {
-          console.log(getTimeString(), '腾讯：本地外网IP变化', `${currentTencentInfo.publicIP}->${ip}`)
+          console.log(
+            getTimeString(),
+            '腾讯：本地外网IP变化',
+            `${currentTencentInfo.publicIP}->${ip}`
+          )
+
+          // 这里查一下当前的recordId
+          const {
+            error,
+            ip: currentIP,
+            recordId = '',
+          } = await queryTencentDomainRecord(getJSON().tencent)
+          if (error) {
+            console.log(getTimeString(), '腾讯：查询当前信息失败', error)
+            return
+          }
+
           currentTencentInfo.publicIP = ip
-          updateTencentDomainRecord(getJSON().tencent, currentTencentInfo.publicIP, currentTencentInfo.recordId)
+          currentTencentInfo.recordId = recordId
+
+          // TODO 这里是不是要等成功之后再修改当前IP，如果要加，要控制尝试次数
+          updateTencentDomainRecord(
+            getJSON().tencent,
+            currentTencentInfo.publicIP,
+            currentTencentInfo.recordId
+          )
         }
       })
     })
@@ -140,10 +200,17 @@ server.listen(PORT, () => {
 
   // 第一次先设置
   const config = getJSON()
-  if (config.tencent.enable) {
+  const tencentEnable = config.tencent.enable
+  const aliEnable = config.ali.enable
+  if (tencentEnable) {
     scheduleJob.query('tencent')
   }
-  if (config.ali.enable) {
+  if (aliEnable) {
     scheduleJob.query('ali')
+  }
+
+  // 如果有一个启动，则自动启动DDNS
+  if (tencentEnable || aliEnable) {
+    scheduleJob.startScheduleJob(config)
   }
 })
